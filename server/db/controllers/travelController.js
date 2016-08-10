@@ -2,14 +2,15 @@ const models = require('../models/models');
 const Travel = models.Travel;
 
 
-const initialTravel = function(event, initialEstimate) {
+const initiateTravel = function(event, initialEstimate) {
   Travel.findOrCreate({
     where: {eventId: event.id},
     defaults: {
       // origins: Sequelize.STRING,
       destination: event.location,
       initialEstimate: initialEstimate,
-      queryTime: event.startDateTime, // need to subtract initial estimate
+      queryTime: new Date(Date.parse(event.startDateTime) - (initialEstimate * 2))
+          // take the arrival time and subtract double the initial estimate for when to begin querying
       // trafficEstimate: Sequelize.INTEGER,
       // mapsUrl: Sequelize.STRING,
       // notificationTime: Sequelize.DATE
@@ -19,6 +20,6 @@ const initialTravel = function(event, initialEstimate) {
   });
 }
 
-modules.export = {
-  initialTravel
+module.exports = {
+  initiateTravel
 }
