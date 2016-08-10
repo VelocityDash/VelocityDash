@@ -24,6 +24,13 @@ const insertEvent = function(data) {
   });
 }
 
+const retrieveEvent = function(id) {
+  return Event.findOne({
+    where: {id: id}
+  })
+}
+
 module.exports = {
-  insertEvent
+  insertEvent,
+  retrieveEvent
 }
