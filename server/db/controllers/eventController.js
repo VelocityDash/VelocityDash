@@ -6,10 +6,11 @@ const Event = models.Event;
 // const googleOAuth = require('./../../setup/googleOAuth');
 // var oauth2Client = googleOAuth.oauth2Client;
 
-const insertEvent = function(data) {
+const insertEvent = function(data, userId) {
   Event.findOrCreate({
     where: {googleCalendarEventId: data.id},
     defaults: {
+      userId: userId,
       name: data.summary,
       eventUrl: data.htmlLink,
       startDateTime: data.start.dateTime,

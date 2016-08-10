@@ -28,6 +28,9 @@ User.hasMany(GuestListUser);
 Travel.belongsTo(Event);
 Event.hasOne(Travel);
 
+Travel.belongsTo(User);
+User.hasMany(Travel);
+
 Attachment.belongsTo(Event);
 Event.hasMany(Attachment);
 

@@ -13,7 +13,8 @@ const initiateTravel = function(event, initialEstimate) {
           // take the arrival time and subtract double the initial estimate for when to begin querying
       // trafficEstimate: Sequelize.INTEGER,
       // mapsUrl: Sequelize.STRING,
-      notificationTime: new Date(Date.parse(event.startDateTime) - (initialEstimate + 300000))
+      notificationTime: new Date(Date.parse(event.startDateTime) - (initialEstimate + 300000)),
+      userId: event.userId
       // notify 5 minutes before you need to leave
     }})
   .spread(function(travel, created) {

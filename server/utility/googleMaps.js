@@ -37,8 +37,10 @@ const getInitialTravelTime = function(eventId) {
   })
 };
 
-
-// [5, 27, 53, 131, 79, 157, 183, 106, 1, 28, 54, 132, 80].forEach((item) => {getInitialTravelTime(item)});
+// manually finding eventIds and adding travel times, just for testing purposes, need to find a better way to automate this
+// for (var i = 0; i <= 214; i++) {
+//   getInitialTravelTime(i);
+// }
 
 module.exports = {
   getInitialTravelTime

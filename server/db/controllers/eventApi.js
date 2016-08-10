@@ -11,7 +11,7 @@ const pubnub = require('./../../pubnub.js')
 
 const postEventToApi = function(req, res) {
   console.log('body', req.body);
-  var id = 2;
+  var userId = 2;
   User.getUserTokens(2)
     .then(data => {
       oauth2Client.setCredentials({
@@ -42,7 +42,7 @@ const postEventToApi = function(req, res) {
           ); 
         }
       });
-      Event.insertEvent(req.body);
+      Event.insertEvent(req.body, userId);
 
     });
   });

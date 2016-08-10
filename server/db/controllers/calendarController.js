@@ -37,7 +37,7 @@ const getAll = function (req, res) {
         }
         console.log(data.items);
         data.items.forEach(event => {
-          Event.insertEvent(event);
+          Event.insertEvent(event, userId);
         })
       });
     });
