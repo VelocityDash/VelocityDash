@@ -31,7 +31,7 @@ agenda.define('send notification', function(job, done) {
 
 
 agenda.on('ready', function() {
-  getTravels();
+  // getTravels();
   agenda.start();
 });
 
@@ -60,7 +60,7 @@ const getTrafficTime = function(eventId) {
         // can probably store destinations in job? 
         mode: 'driving',
         departure_time: 'now', 
-        units: 'imperial'
+        units: 'imperial',
         traffic_model: 'best_guess'
       }
     };
