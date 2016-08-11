@@ -22,6 +22,11 @@ const initiateTravel = function(event, initialEstimate) {
   });
 }
 
+const getAllTravel = function() {
+  return Travel.findAll()
+}
+
 module.exports = {
-  initiateTravel
+  initiateTravel,
+  getAllTravel
 }

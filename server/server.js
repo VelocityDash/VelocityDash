@@ -7,6 +7,8 @@ const router = require('./routes');
 const server = require('http').Server(app);
 const pubnub = require ('./pubnub');
 
+const mapsWorker = require('./workers/mapsWorker');
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, '../client/src')));
