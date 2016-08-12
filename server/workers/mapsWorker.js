@@ -3,6 +3,7 @@ require('dotenv').config();
 const User = require('./../db/controllers/userController');
 const Travel = require('./../db/controllers/travelController');
 const pubnub = require('./../pubnub.js');
+const googleMaps = require('./../utility/googleMaps.js');
 
 const mongoConnectionString = process.env.MONGODB_URI;
 
@@ -20,8 +21,21 @@ var agenda = new Agenda({db: {address: mongoConnectionString, collection: 'mapJo
 // };
 
 agenda.define('query maps for traffic', function(job, done) {
+  // eventId = jobs.attrs.data
+  googleMaps.getTrafficTime(eventId);
+  //.then((data) => {
+
+    // compare against initial estimate time and then if it's more, then change notification time, cancel old one?
+     // agenda.schedule(travel.dataValues.notificationTime, 'send notification', data);
+     // be careful about what data this is, it might be the travel data, not event data. 
+     // this is probably a good reason for combining the event + travel tables together? or would a joined query have been enough to keep track of data? or could query data again here in this job. 
+
+  // this is probably a setInterval to keep querying for Traffic time and then setting new notifcation job if it meets certain requirements. Interval ends when we pass the leave time. 
+
+  // then agenda.cancel({id: jobiD}) or some other kind of identifier of the job we were doing
+
   done();
-})
+});
 
 agenda.define('send notification', function(job, done) {
   // use pubnub to send notification
@@ -36,10 +50,14 @@ agenda.define('send notification', function(job, done) {
     }
   ); 
 
+  // after sending notification, agenda.cancel
+  var travelId = jobs.attrs.data.data.id;
+  agenda.cancel({data: {id: travelId}});
 
-  console.log('sending notification to user to leave now');
+
+  console.log('sending notification to user to leave now for event:', jobs.attrs.data);
   done();
-})
+});
 
 
 agenda.on('ready', function() {
@@ -52,6 +70,7 @@ agenda.on('error', function(err) {
   console.warn('error', err);
 });
 
+module.exports = agenda;
 
 // agenda.jobs Lets you query all of the jobs in the agenda job's database. This is a full mongodb-native find query. See mongodb-native's documentation for details.
 
@@ -68,40 +87,3 @@ agenda.on('error', function(err) {
 
 // agenda.purge(function(err, numRemoved) {
 // });
-
-const request = require('request');
-const url = 'https://maps.googleapis.com/maps/api/distancematrix/json';
-const origins = 'Hack Reactor, 944 Market St, San Francisco, CA 94102';
-
-const getTrafficTime = function(eventId) {
-  Event.retrieveEvent(eventId)
-  .then((event) => {
-    var options = {
-      url,
-      qs: {
-        key: process.env.GOOGLE_MAPS_API_KEY,
-        origins: origins, 
-        // origins needs to be changed
-        destinations: event.dataValues.location,
-        // can probably store destinations in job? 
-        mode: 'driving',
-        departure_time: 'now', 
-        units: 'imperial',
-        traffic_model: 'best_guess'
-      }
-    };
-    request(options, function (error, response, body) {
-      console.log(response.statusCode);
-      if (!error && response.statusCode == 200) {
-        body = JSON.parse(body);
-        console.log(body.rows[0].elements[0]);
-        var distance = body.rows[0].elements[0].distance;
-        var duration = body.rows[0].elements[0].duration;
-        var traffic = duration.value * 1000; // convert seconds to milliseconds
-      }
-    })
-  })
-};
-
-
-module.exports = agenda;
