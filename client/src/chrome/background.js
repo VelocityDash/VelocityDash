@@ -41,3 +41,26 @@ pubnub.subscribe ({
     });
   }
 });
+
+pubnub.subscribe ({
+  channel: 'timeToLeave',
+  message: function(data){
+    var notify = {
+      type: 'basic',
+      title: `Time to Leave for ${data.destination}!`,
+      message: `Looks like there might be traffic, and it will take ${Math.ceil(((data.initialEstimate / 60) / 1000))} minutes to get there`,
+      iconUrl: 'sonic-sega.png',
+      buttons: [{
+        title: 'Click To See Details'
+      }]
+    };
+
+    chrome.notifications.onButtonClicked.addListener(function() {
+      window.open(data.htmlLink);
+    });
+
+    chrome.notifications.create(notify, function() {
+      console.log('successfully created notification!');
+    });
+  }
+});

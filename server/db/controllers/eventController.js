@@ -1,15 +1,17 @@
 const models = require('../models/models');
 const Event = models.Event;
+const googleMaps = require('./../../utility/googleMaps');
 // const User = require('./userController');
 // const google = require('googleapis');
 // var calendar = google.calendar('v3');
 // const googleOAuth = require('./../../setup/googleOAuth');
 // var oauth2Client = googleOAuth.oauth2Client;
 
-const insertEvent = function(data) {
+const insertEvent = function(data, userId) {
   Event.findOrCreate({
     where: {googleCalendarEventId: data.id},
     defaults: {
+      userId: userId,
       name: data.summary,
       eventUrl: data.htmlLink,
       startDateTime: data.start.dateTime,
@@ -21,6 +23,9 @@ const insertEvent = function(data) {
     }})
   .spread(function(event, created) {
     console.log(created, ': event was created');
+
+    // query Google Maps for initial travel time, see utility/googleMaps
+    googleMaps.getInitialTravelTime(event);
   });
 }
 

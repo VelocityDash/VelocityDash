@@ -37,13 +37,13 @@ const getAll = function (req, res) {
         }
         console.log(data.items);
         data.items.forEach(event => {
-          Event.insertEvent(event);
+          Event.insertEvent(event, userId);
         })
       });
     });
   })
   .then(() => {
-    res.send('getting all events from calendar');
+    // res.send('getting all events from calendar');
   });
 };
 
