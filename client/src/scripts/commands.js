@@ -1,17 +1,19 @@
-/*******************
+var Chrono = require('../lib/chrono.min.js');
+
+/********************************************************
   HELPER FUNCTIONS
-*******************/
+********************************************************/
 
 // Start listening for voice commands
 var artyomStart = () => {
   artyom.initialize({
-    lang: 'en-GB', // More languages are documented in the library
-    continuous: true, //if you have https connection, you can activate continuous mode
-    debug: true, //Show everything in the console
-    listen: true // Start listening when this function is triggered
+    lang: 'en-GB',
+    continuous: true,
+    debug: true,
+    listen: true
   });
 
-  artyom.say('What can I do for you today?');
+  artyom.say('Hello there.');
 };
 
 // Stop listening for voice commands
@@ -75,18 +77,34 @@ var getDate = () => {
   return `${day} ${month} ${dateNum}`;
 };
 
-/******************
-  ARTYOM COMMANDS
-******************/
+var fillOutForm = (wildcard) => {
+  var split = wildcard.split(' at ');
 
+  var dateObject = Chrono.parse(split[1])[0].start;
+  var date = Object.assign(dateObject.impliedValues, dateObject.knownValues);
+  
+  var time = '';
+  (date.hour > 12) ? time += `${date.hour - 12}:` : time += `${date.hour}:`;
+  (date.minute === 0) ? time += '00 ' : time += `${date.minute} `;
+  (date.hour >= 12) ? time += 'PM' : time += 'AM';
+
+  // Unhide and fill out form
+  $('.calendar-form').css('display', 'initial');
+  $('.form-event').val(split[0]);
+  $('.form-location').val(split[2]);
+  $('.form-month').val(date.month);
+  $('.form-day').val(date.day);
+  $('.form-year').val(date.year);
+  $('.form-time').val(time);
+
+  artyom.say(`Added ${split[0]} at ${split[2]} to the calendar.`);
+};
+
+/********************************************************
+  ARTYOM COMMANDS
+********************************************************/
 
 artyom.addCommands([
-  {
-    indexes: ['hello', 'what\'s up'],
-    action: (i) => {
-      artyom.say('Hi there. I hope your day is going well.');
-    }
-  },
   {
     indexes: ['stop listening'],
     action: (i) => { artyomStop() }
@@ -110,15 +128,11 @@ artyom.addCommands([
   },
   {
     indexes: ['what time is it'],
-    action: (i) => {
-      artyom.say(`It is currently ${getTime()}.`);
-    }
+    action: (i) => { artyom.say(`It is currently ${getTime()}.`) }
   },
   {
     indexes: ['what\'s the date today'],
-    action: (i) => {
-      artyom.say(`Today is ${getDate()}.`);
-    }
+    action: (i) => { artyom.say(`Today is ${getDate()}.`) }
   },
   {
     indexes: ['* I choose you'],
@@ -145,17 +159,54 @@ artyom.addCommands([
   {
     indexes: ['open *'],
     smart: true,
-    action: (i, wildcard) => {
-      window.open(`http://${wildcard}`);
-    }
+    action: (i, wildcard) => { window.open(`http://${wildcard}`) }
   },
   {
     indexes: ['search YouTube for *'],
     smart: true,
+    action: (i, wildcard) => { window.open(`https://www.youtube.com/results?search_query=${wildcard}`) }
+  },
+  {
+    indexes: ['create event *'],
+    smart: true,
     action: (i, wildcard) => {
-      window.open(`https://www.youtube.com/results?search_query=${wildcard}`);
+      // fillOutForm(Chrono.parse(wildcard)[0].start);
+      fillOutForm(wildcard);
     }
   }
 ]);
 
 artyomStart();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
