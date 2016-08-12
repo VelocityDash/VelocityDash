@@ -23,7 +23,7 @@ app.all('/api/*', function(req, res, next) {
 app.use('/api', router);
 
 app.get('*', (req, res)=>{
-  res.sendFile(path.join(__dirname + '/../client/src/index.html'));
+  res.sendFile(path.join(__dirname + '/../client/public/dist/index.html'));
 });
 
 server.listen(9000, () => {
