@@ -2,36 +2,48 @@ const Agenda = require('agenda');
 require('dotenv').config();
 const User = require('./../db/controllers/userController');
 const Travel = require('./../db/controllers/travelController');
+const pubnub = require('./../pubnub.js');
 
 const mongoConnectionString = process.env.MONGODB_URI;
 
 var agenda = new Agenda({db: {address: mongoConnectionString, collection: 'mapJobs'}});
 
-const getTravels = function() {
-  Travel.getAllTravel()
-  .then((data) => {
-    // data is an array of Travel objects from Postgres
-    for (var i = 0; i < data.length; i++) {
-      console.log(data[i].dataValues.notificationTime);
-      agenda.schedule(data[i].dataValues.notificationTime, 'send notification');
-    }
-  });
-};
+// const getTravels = function() {
+//   Travel.getAllTravel()
+//   .then((data) => {
+//     // data is an array of Travel objects from Postgres
+//     for (var i = 0; i < data.length; i++) {
+//       console.log(data[i].dataValues.notificationTime);
+//       agenda.schedule(data[i].dataValues.notificationTime, 'send notification', data[i].dataValues);
+//     }
+//   });
+// };
 
 agenda.define('query maps for traffic', function(job, done) {
   done();
 })
 
 agenda.define('send notification', function(job, done) {
-  // use pub nub to send notification
+  // use pubnub to send notification
+  pubnub.publish({
+    message: jobs.attrs.data, // third argument for schedule is data that is passed in as jobs.attrs.data
+    channel: 'timeToLeave',
+    sendByPost: false, // true to send via post
+    storeInHistory: false //override default storage options
+    // meta: { "cool": "meta" } // publish extra meta with the request
+    }, function (status, response) {
+      // handle status, response
+    }
+  ); 
+
 
   console.log('sending notification to user to leave now');
   done();
 })
 
 
-
 agenda.on('ready', function() {
+  // agenda.schedule('in 5 minutes', 'send notification', {data: 'data'});
   // getTravels();
   agenda.start();
 });
@@ -92,6 +104,4 @@ const getTrafficTime = function(eventId) {
 };
 
 
-module.exports = {
-  agenda
-}
+module.exports = agenda;

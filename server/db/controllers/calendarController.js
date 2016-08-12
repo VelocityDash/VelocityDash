@@ -43,7 +43,7 @@ const getAll = function (req, res) {
     });
   })
   .then(() => {
-    res.send('getting all events from calendar');
+    // res.send('getting all events from calendar');
   });
 };
 

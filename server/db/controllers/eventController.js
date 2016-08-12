@@ -23,6 +23,8 @@ const insertEvent = function(data, userId) {
     }})
   .spread(function(event, created) {
     console.log(created, ': event was created');
+
+    // query Google Maps for initial travel time, see utility/googleMaps
     googleMaps.getInitialTravelTime(event);
   });
 }

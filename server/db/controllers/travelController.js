@@ -1,5 +1,7 @@
 const models = require('../models/models');
 const Travel = models.Travel;
+const agenda = require('./../../workers/mapsWorker');
+
 
 
 const initiateTravel = function(event, initialEstimate) {
@@ -19,6 +21,8 @@ const initiateTravel = function(event, initialEstimate) {
     }})
   .spread(function(travel, created) {
     console.log(created, ': travel was created');
+      // schedule notification to be sent based on initial travel time, see workers/mapsWorker.js
+    agenda.schedule(travel.dataValues.notificationTime, 'send notification', travel.dataValues);
   });
 }
 

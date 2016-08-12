@@ -24,13 +24,15 @@ const getInitialTravelTime = function(event) {
       }
     };
     request(options, function (error, response, body) {
-      console.log(response.statusCode);
+      // console.log(response.statusCode);
       if (!error && response.statusCode == 200) {
         // console.log(event, '(', destinations, ')');
         body = JSON.parse(body);
         console.log(body.rows[0].elements[0]);
         var distance = body.rows[0].elements[0].distance;
         var duration = body.rows[0].elements[0].duration;
+
+        // add data to Travel table, see /db/controlelrs/travelController
         Travel.initiateTravel(event, (duration.value * 1000)); // convert seconds to milliseconds
       }
     });
