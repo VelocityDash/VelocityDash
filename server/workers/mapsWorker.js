@@ -10,8 +10,7 @@ var agenda = new Agenda({db: {address: mongoConnectionString, collection: 'mapJo
 const getTravels = function() {
   Travel.getAllTravel()
   .then((data) => {
-    // console.log(data);
-    // data is an array of objects
+    // data is an array of Travel objects from Postgres
     for (var i = 0; i < data.length; i++) {
       console.log(data[i].dataValues.notificationTime);
       agenda.schedule(data[i].dataValues.notificationTime, 'send notification');
@@ -24,10 +23,12 @@ agenda.define('query maps for traffic', function(job, done) {
 })
 
 agenda.define('send notification', function(job, done) {
-  //use socket.io to emit notification to user
+  // use pub nub to send notification
+
   console.log('sending notification to user to leave now');
   done();
 })
+
 
 
 agenda.on('ready', function() {
@@ -40,8 +41,21 @@ agenda.on('error', function(err) {
 });
 
 
+// agenda.jobs Lets you query all of the jobs in the agenda job's database. This is a full mongodb-native find query. See mongodb-native's documentation for details.
 
+// agenda.jobs({name: 'printAnalyticsReport'}, function(err, jobs) {
+//   // Work with jobs (see below)
+// });
 
+// agenda.cancel Cancels any jobs matching the passed mongodb-native query, and removes them from the database.
+
+// agenda.cancel({name: 'printAnalyticsReport'}, function(err, numRemoved) {
+// });
+
+// agenda.purge Removes all jobs in the database without defined behaviors. Useful if you change a definition name and want to remove old jobs. IMPORTANT: Do not run this before you finish defining all of your jobs. If you do, you will nuke your database of jobs.
+
+// agenda.purge(function(err, numRemoved) {
+// });
 
 const request = require('request');
 const url = 'https://maps.googleapis.com/maps/api/distancematrix/json';
