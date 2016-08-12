@@ -40,7 +40,7 @@ agenda.define('query maps for traffic', function(job, done) {
 agenda.define('send notification', function(job, done) {
   // use pubnub to send notification
   pubnub.publish({
-    message: jobs.attrs.data, // third argument for schedule is data that is passed in as jobs.attrs.data
+    message: job.attrs.data, // third argument for schedule is data that is passed in as jobs.attrs.data
     channel: 'timeToLeave',
     sendByPost: false, // true to send via post
     storeInHistory: false //override default storage options
@@ -51,11 +51,11 @@ agenda.define('send notification', function(job, done) {
   ); 
 
   // after sending notification, agenda.cancel
-  var travelId = jobs.attrs.data.data.id;
+  var travelId = job.attrs.data.data.id;
   agenda.cancel({data: {id: travelId}});
 
 
-  console.log('sending notification to user to leave now for event:', jobs.attrs.data);
+  console.log('sending notification to user to leave now for event:', job.attrs.data);
   done();
 });
 
