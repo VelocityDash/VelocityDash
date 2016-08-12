@@ -9,7 +9,7 @@ const pubnub = require ('./pubnub');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, '../client/src')));
+app.use(express.static(path.join(__dirname, '../client/public/dist/')));
 
 app.all('/api/*', function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
@@ -23,7 +23,7 @@ app.all('/api/*', function(req, res, next) {
 app.use('/api', router);
 
 app.get('*', (req, res)=>{
-  res.sendFile(path.join(__dirname + '/../client/src/index.html'));
+  res.sendFile(path.join(__dirname + '/../client/public/dist/index.html'));
 });
 
 server.listen(9000, () => {

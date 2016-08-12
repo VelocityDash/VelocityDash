@@ -106,12 +106,12 @@ class Form extends React.Component {
         <form className="calendar-form" onSubmit={this.handleSubmit.bind(this)}>
           Event:<br/>
           <input type="text" className="form-event" value={this.state.summary} placeholder="Event" onChange={this.handleChange.bind(this)} /><br/><br/>
-          Location:<br/>
-          <input type="text" className="form-location" value={this.state.location} placeholder="Location" onChange={this.handleChange.bind(this)} /><br/><br/>
           Date:<br/>
           <input type="text" className="form-date" value={this.state.startDate} placeholder="Date" onChange={this.handleChange.bind(this)} /><br/><br/>
           Time:<br/>
           <input type="text" className="form-time" value={this.state.startTime} placeholder="Time" onChange={this.handleChange.bind(this)} /><br/><br/>
+          Location:<br/>
+          <input type="text" className="form-location" value={this.state.location} placeholder="Location" onChange={this.handleChange.bind(this)} /><br/><br/>
 
           <input type="submit" value="Submit" />
         </form>

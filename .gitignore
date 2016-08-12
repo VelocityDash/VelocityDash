@@ -1,6 +1,6 @@
 #Node Modules#
 /node_modules
-/client/public/dist
+/client/public/dist/bundle.js
 
 #private keys#
 .env
@@ -9,7 +9,5 @@ NMO.pem
 /client/.DS_STORE
 /public/dist/bundle.js
 /client/src/.DS_STORE
-/client/src/scripts/bundle.js
-
 
 npm-debug.log

@@ -1,11 +1,12 @@
-var Chrono = require('../lib/chrono.min.js');
+const Chrono = require('../lib/chrono.min.js');
+const $ = require('../lib/jquery.js');
 
 /********************************************************
   HELPER FUNCTIONS
 ********************************************************/
 
 // Start listening for voice commands
-var artyomStart = () => {
+const artyomStart = () => {
   artyom.initialize({
     lang: 'en-GB',
     continuous: true,
@@ -13,21 +14,21 @@ var artyomStart = () => {
     listen: true
   });
 
-  artyom.say('Hello there.');
+  artyom.say('Started listening.');
 };
 
 // Stop listening for voice commands
-var artyomStop = () => {
+const artyomStop = () => {
   artyom.fatality();
   artyom.say('Goodbye.');
 };
 
 // Get current time
-var getTime = () => {
-  var date = Date().slice(16, Date().length - 15);
-  var hours = date.slice(0, 2);
-  var minutes = date.slice(3, 5);
-  var amPm;
+const getTime = () => {
+  const date = Date().slice(16, Date().length - 15);
+  let hours = date.slice(0, 2);
+  let minutes = date.slice(3, 5);
+  let amPm;
 
   if (hours >= 12) {
     amPm = 'PM';
@@ -40,13 +41,13 @@ var getTime = () => {
 };
 
 // Get current date
-var getDate = () => {
-  var date = Date().slice(0, 15);
-  var day = date.slice(0, 3);
-  var month = date.slice(4, 7);
-  var dateNum = Number(date.slice(8, 10));
+const getDate = () => {
+  const date = Date().slice(0, 15);
+  let day = date.slice(0, 3);
+  let month = date.slice(4, 7);
+  let dateNum = Number(date.slice(8, 10));
 
-  var months = {
+  let months = {
     'Jan': 'January',
     'Feb': 'February',
     'Mar': 'March',
@@ -61,7 +62,7 @@ var getDate = () => {
     'Dec': 'December'
   };
 
-  var days = {
+  let days = {
     'Mon': 'Monday',
     'Tue': 'Tuesday',
     'Wed': 'Wednesday',
@@ -77,25 +78,41 @@ var getDate = () => {
   return `${day} ${month} ${dateNum}`;
 };
 
-var fillOutForm = (wildcard) => {
-  var split = wildcard.split(' at ');
+// Function that will take formData
+let handleFormData = () => {
+  throw new Error('Missing callback function for onFillOutForm!');
+};
 
-  var dateObject = Chrono.parse(split[1])[0].start;
-  var date = Object.assign(dateObject.impliedValues, dateObject.knownValues);
+const fillOutForm = (wildcard) => {
+  // Separate event name, date/time and location
+  let split = wildcard.split(' at ');
+
+  // TO DO: Add console.warn if order of wildcard said wrong
+
+  // Parse date/time information into object
+  let dateObject = Chrono.parse(split[1])[0].start;
+  let date = Object.assign(dateObject.impliedValues, dateObject.knownValues);
   
-  var time = '';
-  (date.hour > 12) ? time += `${date.hour - 12}:` : time += `${date.hour}:`;
-  (date.minute === 0) ? time += '00 ' : time += `${date.minute} `;
-  (date.hour >= 12) ? time += 'PM' : time += 'AM';
+  // Add leading zeroes to month/day if less than 10
+  (date.month < 10) ? date.month = `0${date.month}` : date.month = `${date.month}`;
+  (date.day < 10) ? date.day = `0${date.day}` : date.day = `${date.day}`;
+  
+  // Add leading zeroes to hour/minute if less than 10
+  let time = '';
+  (date.hour < 10) ? time += `0${date.hour}:` : time += `${date.hour}:`;
+  (date.minute < 10) ? time += `0${date.minute}` : time += `${date.minute} `;
 
-  // Unhide and fill out form
-  $('.calendar-form').css('display', 'initial');
-  $('.form-event').val(split[0]);
-  $('.form-location').val(split[2]);
-  $('.form-month').val(date.month);
-  $('.form-day').val(date.day);
-  $('.form-year').val(date.year);
-  $('.form-time').val(time);
+  // Generate form data object to pass to this.setState
+  let formInfo = {
+    summary: split[0],
+    location: split[2],
+    startDate: `${date.year}-${date.month}-${date.day}`,
+    startTime: time,
+    endDate: `${date.year}-${date.month}-${date.day}`,
+    endTime: time
+  };
+
+  handleFormData(formInfo);
 
   artyom.say(`Added ${split[0]} at ${split[2]} to the calendar.`);
 };
@@ -104,7 +121,7 @@ var fillOutForm = (wildcard) => {
   ARTYOM COMMANDS
 ********************************************************/
 
-artyom.addCommands([
+const commands = [
   {
     indexes: ['stop listening'],
     action: (i) => { artyomStop() }
@@ -113,7 +130,7 @@ artyom.addCommands([
     indexes: ['render spotify playlist'],
     action: (i) => {
       artyom.say('Rendering Spotify playlist.');
-
+      
       $playlist = $('<iframe src="https://embed.spotify.com/?uri=spotify%3Auser%3Ababybluejeff%3Aplaylist%3A6toivxuv2M1tBLjLWZwf3d" width="300" height="380" frameborder="0" allowtransparency="true"></iframe>');
       $playlist.appendTo($('#main1'));
     }
@@ -170,43 +187,22 @@ artyom.addCommands([
     indexes: ['create event *'],
     smart: true,
     action: (i, wildcard) => {
-      // fillOutForm(Chrono.parse(wildcard)[0].start);
       fillOutForm(wildcard);
     }
   }
-]);
+];
 
-artyomStart();
+/********************************************************
+  EXPORTS
+********************************************************/
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+module.exports = {
+  artyomStart: artyomStart,
+  artyomStop: artyomStop,
+  fillOutForm: fillOutForm,
+  addCommands: artyom.addCommands,
+  commands: commands,
+  onFillOutForm: function(callback) {
+    handleFormData = callback;
+  }
+};
