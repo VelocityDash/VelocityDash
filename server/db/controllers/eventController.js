@@ -1,5 +1,6 @@
 const models = require('../models/models');
 const Event = models.Event;
+const googleMaps = require('./../../utility/googleMaps');
 // const User = require('./userController');
 // const google = require('googleapis');
 // var calendar = google.calendar('v3');
@@ -22,6 +23,7 @@ const insertEvent = function(data, userId) {
     }})
   .spread(function(event, created) {
     console.log(created, ': event was created');
+    googleMaps.getInitialTravelTime(event);
   });
 }
 

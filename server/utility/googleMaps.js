@@ -7,9 +7,9 @@ require('dotenv').config();
 const url = 'https://maps.googleapis.com/maps/api/distancematrix/json';
 const origins = 'Hack Reactor, 944 Market St, San Francisco, CA 94102';
 
-const getInitialTravelTime = function(eventId) {
-  Event.retrieveEvent(eventId)
-  .then((event) => {
+const getInitialTravelTime = function(event) {
+  // Event.retrieveEvent(eventId)
+  // .then((event) => {
     var options = {
       url,
       qs: {
@@ -33,14 +33,8 @@ const getInitialTravelTime = function(eventId) {
         var duration = body.rows[0].elements[0].duration;
         Travel.initiateTravel(event, (duration.value * 1000)); // convert seconds to milliseconds
       }
-    })
-  })
+    });
 };
-
-// manually finding eventIds and adding travel times, just for testing purposes, need to find a better way to automate this
-// for (var i = 0; i <= 214; i++) {
-//   getInitialTravelTime(i);
-// }
 
 module.exports = {
   getInitialTravelTime
