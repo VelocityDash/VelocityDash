@@ -6,14 +6,16 @@ class Time extends React.Component {
     super(props)
     this.state = {
       time: '',
-      date: moment().format('dddd MMMM Do YYYY')
+      date: moment().format('dddd, MMMM D')
+
+      // date: moment().format('dddd MMMM Do YYYY')
     }
   }
 
   tick() {
     var time = moment(new Date());
     this.setState({
-      time: time.format('h:mm:ss a')
+      time: time.format('h:mm:ss A')
     })
   }
 

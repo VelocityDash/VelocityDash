@@ -5,6 +5,26 @@ body, input, select, textarea, button {
 .today {
   /*position: absolute;*/
   /*display: block;*/
+  top: 10%;
+  /*left: 50%;*/
+  /*width: 100%;*/
+  margin-top: 70px;
+  text-align: center;
+  font-size: 250%;
+  font-weight: 600;
+
+}
+
+.time {
+
+}
+.date {
+
+}
+
+.calendar {
+  /*position: absolute;*/
+  /*display: block;*/
   /*top: 10%;*/
   /*left: 50%;*/
   /*width: 100%;*/
@@ -12,9 +32,28 @@ body, input, select, textarea, button {
   text-align: center;
 }
 
-.time {
+.calendar-title {
+  font-size: 160%;
+  font-weight: 500;
+}
+
+.calendar-entry {
+  margin-top: 7.5px;
+  margin-bottom: 7.5px;
+  font-weight: 100;
+}
+
+.event-start {
+  font-size: 80%;
 
 }
-.date {
+
+.event-summary-location {
+  font-size: 70%;
+
+}
+
+.event-location {
+  font-size: 60%;
 
 }

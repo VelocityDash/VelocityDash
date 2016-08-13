@@ -23,15 +23,12 @@ const CalendarEntry = (props) => {
 
   let start = getTime(props.event.startTime)
   return (
-    <div className='event-entry'>
-      <div className='start'>
+    <div className='calendar-entry'>
+      <div className='event-start'>
         {start}
       </div>
-      <div className='summary'>
-        {props.event.summary}
-      </div>
-      <div className='location'>
-        {props.event.location}
+      <div className='event-summary-location'>
+        {props.event.summary} at {props.event.location}
       </div>
     </div>
   )

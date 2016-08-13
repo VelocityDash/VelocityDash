@@ -9,8 +9,8 @@ class Calendar extends React.Component {
 
   render() {
     return(
-      <div className='Calendar'>
-        Today's Events
+      <div className='calendar'>
+        <div className='calendar-title'>Today</div>
         {this.props.events.map((event, i) =>
           <CalendarEntry key={i} event={event} />
         )};
