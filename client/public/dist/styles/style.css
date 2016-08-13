@@ -50,10 +50,37 @@ body, input, select, textarea, button {
 
 .event-summary-location {
   font-size: 70%;
-
 }
 
-.event-location {
-  font-size: 60%;
+.calendar-form {
+  margin: auto;
+  font-weight: 100;
+  font-size: 80%;
+}
 
+input {
+  font-weight: 100;
+  font-size: 80%;
+}
+
+.ModalClass {
+  position: absolute;
+  /*margin: auto;*/
+/*  width: 90%;
+  height: 90%;*/
+  top: 10%;
+  left: 20%;
+  right: 20%;
+  bottom: 20%;
+  
+  background-color: papayawhip;
+}
+
+.OverlayClass {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  /*opacity: 0.7;*/
 }

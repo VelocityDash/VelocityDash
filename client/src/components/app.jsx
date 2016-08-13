@@ -7,6 +7,7 @@ import Chrono from '../lib/chrono.min.js';
 import artyom from '../lib/artyom.min.js';
 import $ from '../lib/jquery.js';
 const commands = require('../scripts/commands.js');
+var Modal = require('react-modal');
 
 
 class App extends React.Component {

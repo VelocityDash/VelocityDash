@@ -88,6 +88,7 @@ const fillOutForm = (wildcard) => {
   let split = wildcard.split(' at ');
   let eventName = split[0];
   let location;
+  // TO DO: uppercase first letter of each word in eventName & location
   let dateObject;
 
   // Set location and dateObject depending on the order of command
@@ -208,6 +209,19 @@ const commands = [
     smart: true,
     action: (i, wildcard) => {
       fillOutForm(wildcard);
+    }
+  },
+  {
+    indexes: ['add event *'],
+    smart: true,
+    action: (i, wildcard) => {
+      fillOutForm(wildcard);
+    }
+  },
+  {
+    indexes: ['looks good', 'add to calendar'],
+    action: (i) => {
+      // need to call function that will call 
     }
   }
   // {
