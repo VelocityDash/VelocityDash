@@ -13,7 +13,23 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      events: []
+      events: [
+        {
+          summary: 'Hacking All Day',
+          location: 'Hack Reactor',
+          startTime: '13:00'
+        },
+        {
+          summary: 'Dinner',
+          location: 'Sushiritto',
+          startTime: '19:00'
+        },
+        {
+          summary: 'Drinks',
+          location: 'Tempest',
+          startTime: '22:00'
+        }
+      ]
     }
   }
 
