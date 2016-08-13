@@ -13,7 +13,7 @@ class Calendar extends React.Component {
         <div className='calendar-title'>Today</div>
         {this.props.events.map((event, i) =>
           <CalendarEntry key={i} event={event} />
-        )};
+        )}
       </div>
     )
   }
