@@ -2,45 +2,62 @@ body, input, select, textarea, button {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
+
+
 .today {
-  /*position: absolute;*/
+  position: absolute;
   /*display: block;*/
   top: 10%;
-  /*left: 50%;*/
-  /*width: 100%;*/
+  left: 50%;
+  width: 50%;
   margin-top: 70px;
   text-align: center;
   font-size: 250%;
   font-weight: 600;
-
+  transform: translateX(-50%) translateY(-50%);
 }
 
-.time {
 
+
+.time:hover {
+  background-color: paleturquoise;
 }
-.date {
 
+.date:hover {
+  background-color: paleturquoise;
 }
 
 .calendar {
-  /*position: absolute;*/
+  position: absolute;
   /*display: block;*/
-  /*top: 10%;*/
-  /*left: 50%;*/
-  /*width: 100%;*/
+  top: 52.5%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+  width: 30%;
   margin-top: 20px;
-  text-align: center;
+  /*text-align: center;*/
 }
 
 .calendar-title {
   font-size: 160%;
   font-weight: 500;
+  text-align: center;
+}
+
+.calendar-title:hover {
+  background-color: paleturquoise;
 }
 
 .calendar-entry {
   margin-top: 7.5px;
   margin-bottom: 7.5px;
   font-weight: 100;
+  text-align: center;
+}
+
+.calendar-entry:hover {
+  background-color: paleturquoise;
+  opacity: 80%;
 }
 
 .event-start {
@@ -53,27 +70,36 @@ body, input, select, textarea, button {
 }
 
 .calendar-form {
-  margin: auto;
+  /*margin: auto;*/
+  width: 100%;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
   font-weight: 100;
   font-size: 80%;
+  text-align: center;
+}
+
+.calendar-form-title {
+  font-size: 150%;
+  font-weight: 300;
+  margin-bottom: 5px;
 }
 
 input {
   font-weight: 100;
   font-size: 80%;
+  margin-bottom: 2px;
 }
 
 .ModalClass {
   position: absolute;
-  /*margin: auto;*/
-/*  width: 90%;
-  height: 90%;*/
-  top: 10%;
-  left: 20%;
-  right: 20%;
-  bottom: 20%;
-  
-  background-color: papayawhip;
+  top: 25%;
+  left: 30%;
+  right: 30%;
+  bottom: 35%;
+  /*border: 1px, dotted, black;*/  
+  background-color: paleturquoise;
 }
 
 .OverlayClass {
@@ -82,5 +108,5 @@ input {
   left: 0;
   right: 0;
   bottom: 0;
-  /*opacity: 0.7;*/
+  background-color: white;
 }

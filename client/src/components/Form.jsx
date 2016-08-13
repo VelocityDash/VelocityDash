@@ -18,6 +18,7 @@ class Form extends React.Component {
     }
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.closeModal = this.closeModal.bind(this);
   }
 
   componentDidMount() {
@@ -138,12 +139,22 @@ class Form extends React.Component {
       >
         <div>
           <form className="calendar-form" onSubmit={this.handleSubmit}>
-            Event: <input type="text" className="form-event" value={this.state.summary} placeholder="Event" onChange={this.handleChange} /><br/><br/>
-            Location: <input type="text" className="form-location" value={this.state.location} placeholder="Location" onChange={this.handleChange} /><br/><br/>
-            Date: <input type="text" className="form-date" value={this.state.startDate} placeholder="Date" onChange={this.handleChange} /><br/><br/>
-            Time: <input type="text" className="form-time" value={this.state.startTime} placeholder="Time" onChange={this.handleChange} /><br/><br/>
-
-            <input type="submit" value="Submit" onClick={this.closeModal} />
+            <div className="calendar-form-title"> How's this look? </div>
+            <div>
+              Event: <input type="text" className="form-event" value={this.state.summary} placeholder="Event" onChange={this.handleChange} />
+            </div>
+            <div>
+              Location: <input type="text" className="form-location" value={this.state.location} placeholder="Location" onChange={this.handleChange} />
+            </div>
+            <div>
+              Date: <input type="text" className="form-date" value={this.state.startDate} placeholder="Date" onChange={this.handleChange} />
+            </div>
+            <div>
+              Time: <input type="text" className="form-time" value={this.state.startTime} placeholder="Time" onChange={this.handleChange} />
+            </div>
+            <div>
+              <input type="submit" value="Looks good!" onClick={this.closeModal} />
+            </div>
           </form>
         </div>
       </Modal>
