@@ -18,7 +18,6 @@ class Form extends React.Component {
     }
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.closeModal = this.closeModal.bind(this);
   }
 
   componentDidMount() {
@@ -115,6 +114,8 @@ class Form extends React.Component {
     }).catch((err) => {
       console.log('err', err);
     });
+
+    this.closeModal();
   }
 
   openModal() {
@@ -153,7 +154,7 @@ class Form extends React.Component {
               Time: <input type="text" className="form-time" value={this.state.startTime} placeholder="Time" onChange={this.handleChange} />
             </div>
             <div>
-              <input type="submit" value="Looks good!" onClick={this.closeModal} />
+              <input type="submit" value="Looks good!" onClick={this.handleSubmit} />
             </div>
           </form>
         </div>
