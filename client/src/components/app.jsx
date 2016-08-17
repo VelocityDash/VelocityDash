@@ -30,11 +30,12 @@ class App extends React.Component {
             };
           });
 
-          this.sortAndUpdateEvents(eventList);
-        })
-        .catch((err) => {
-          console.log('Error retrieving events', err);
-        }); 
+        this.sortAndUpdateEvents(eventList);
+      })
+      .catch((err) => {
+        console.log('Error retrieving events', err);
+      })
+
   }
 
   sortAndUpdateEvents(eventList) {
@@ -46,7 +47,7 @@ class App extends React.Component {
     // Sort event times in chronological order
     times.sort((a, b) => new Date(`1970/01/01 ${a}`) - new Date(`1970/01/01 ${b}`));
 
-    // TO DO: Bug fix - if there are multiple events are at the same time, the last 
+    // TO DO: Bug fix - if there are multiple events are at the same time, the last
     // event with the same time will overwrite the first one
 
     // Sort events based on start time

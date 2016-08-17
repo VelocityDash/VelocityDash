@@ -1,0 +1,32 @@
+{
+  "manifest_version": 2,
+  "name": "ModDash",
+  "description": "Quickly switch to other open tabs with just your keyboard",
+  "version": "1.0.0",
+  "background": {
+    "persistent": true,
+    "page": "./src/chrome/background.html"
+  },
+  "icons": {
+  "128": "./src/chrome/firebase.png"
+  },
+  "browser_action": {
+    "default_icon": "./src/chrome/firebase.png",
+    "default_popup": "./src/chrome/credentials.html"
+  },
+  "chrome_url_overrides": {
+    "newtab": "./public/dist/index.html"
+  },
+  "permissions": [
+    "notifications",
+    "background",
+    "identity"
+  ],
+  "oauth2": {
+    "client_id": "620726441303-0pq214v1roabf307l9pgunb1r218qr52.apps.googleusercontent.com",
+    "scopes": ["https://www.googleapis.com/auth/userinfo.email", "https://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/calendar"],
+    "access_type": "offline"
+  },
+  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAk2FN49QbJzUNpgCXv1If5kQ9e3qXdl362P12pFgJnLFj0ac5dTK30TZZ4DEjmT/Kb7DFLbW0Qh/nCdv1goxthmrzgdoDSTd7a751fi89OVM8BT7IgwHU/RTURu4pgBB19PYVVVRrPFpC3MnMpqgC6hiiPkxv9zyGyeCcnB5y3xILoOseV4p60rQDq5vfc8YKNjIh5P+A8vHeWb5cLA7BiNDpCDdU4O+afkcYNrR4+OJdn7L2ZdgTUA1BQyRnmknV9sCwGUKHzt41XsYtNci14Tbz90hCTxut95l2ux7O+PpIQtNZFsGJZ+1KjQmzwdUNqq3yK/Q/6YcD/nDYHUwRvQIDAQAB",
+  "content_security_policy": "script-src 'self' https://www.gstatic.com/ https://*.firebaseio.com https://www.googleapis.com https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.14.1/ https://cdn.pubnub.com/; object-src 'self' "
+}

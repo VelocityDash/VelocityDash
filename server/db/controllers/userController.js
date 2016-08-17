@@ -42,6 +42,7 @@ const getUserTokens = function(id) {
     });
 
     oauth2Client.refreshAccessToken((err, tokens) => {
+      console.log('token', tokens);
       oauth2Client.setCredentials({
         access_token: tokens.access_token,
         refresh_token: tokens.refresh_token
@@ -60,7 +61,7 @@ const getGeolocation = (id) => {
 const updateUserGeolocation = (id, geolocation) => {
   return User.update(
     { geolocation: geolocation },
-    { where: {id : id} })  
+    { where: {id : id} })
       .then((result) => result)
       .catch((err) => err);
 };

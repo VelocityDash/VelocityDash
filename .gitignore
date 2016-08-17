@@ -4,7 +4,6 @@
 
 #private keys#
 .env
-NMO.pem
 
 /client/.DS_STORE
 /public/dist/bundle.js
