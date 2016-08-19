@@ -1,36 +1,50 @@
 const models = require('../models/models');
 const Event = models.Event;
-// const User = require('./userController');
-// const google = require('googleapis');
-// var calendar = google.calendar('v3');
-// const googleOAuth = require('./../../setup/googleOAuth');
-// var oauth2Client = googleOAuth.oauth2Client;
+const moment = require('moment');
+const zone = require('moment-timezone');
+const db = require('../db.js');
 
-const insertEvent = function(data) {
-  Event.findOrCreate({
-    where: {googleCalendarEventId: data.id},
+const insertEvent = (data, userId) => {
+  return Event.findOrCreate({
+    where: { googleCalendarEventId: data.id },
     defaults: {
+      userId,
       name: data.summary,
       eventUrl: data.htmlLink,
-      startDateTime: data.start.dateTime,
-      endDateTime: data.end.dateTime,
-      recurrence: JSON.stringify(data.recurrence),
+      startdatetime: data.start.dateTime,
+      enddatetime: data.end.dateTime,
       // currently not checking for recurrence since the calendar events query has "single events: true" which lists every single event
+      recurrence: JSON.stringify(data.recurrence),
       location: data.location,
       description: data.description
-    }})
-  .spread(function(event, created) {
-    console.log(created, ': event was created');
+    }
   });
 }
 
-const retrieveEvent = function(id) {
+const retrieveEvent = (id) => {
   return Event.findOne({
     where: {id: id}
-  })
-}
+  });
+};
+
+const retrieveDayEvent = () => {
+  var nowInUTC = moment().utcOffset(0000).subtract(7, 'hours').format('YYYY-MM-DD HH:mm') + ':00+00';
+  var midnightInUTC = moment().add(1, 'days').format('YYYY-MM-DD') + ' 06:59:00+00';
+
+  // Get all events for today (events in DB are in UTC time)
+  var queryString = `SELECT * FROM events WHERE startdatetime BETWEEN '${nowInUTC}' AND '${midnightInUTC}'`;
+  return db.query(queryString)
+  .spread((datas, metadata) => {
+    datas.forEach((data) => {
+      data.startdatetime = moment(data.startdatetime).format('LT');
+    });
+
+    return datas;
+  });
+};
 
 module.exports = {
   insertEvent,
-  retrieveEvent
-}
+  retrieveEvent,
+  retrieveDayEvent
+};

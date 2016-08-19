@@ -1,5 +1,4 @@
 const Sequelize = require('sequelize');
-require('dotenv').config();
 
 // Connect to database
 const db = new Sequelize('nevermissout', process.env.PSQL_username, process.env.PSQL_password, {
@@ -15,10 +14,10 @@ const db = new Sequelize('nevermissout', process.env.PSQL_username, process.env.
 // Test Sequelize connection
 db.authenticate()
   .then(err => {
-    console.log('Connection has been established successfully.');
+    console.log('Server is connected to AWS postgres db.');
   })
   .catch(err => {
-    console.log('Unable to connect to the database:\n', err);
+    console.log('Unable to connect to Postgres AWS database:\n', err);
   });
 
 module.exports = db;

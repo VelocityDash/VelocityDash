@@ -1,4 +1,6 @@
 import React from 'react';
+import moment from 'moment';
+var Modal = require('react-modal');
 
 class Form extends React.Component {
   constructor(props) {
@@ -11,31 +13,43 @@ class Form extends React.Component {
       startTime: '',
       endDate: '',
       endTime: '',
+      modalIsOpen: false,
     }
+
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.openModal = this.openModal.bind(this);
+    this.closeModal = this.closeModal.bind(this);
   }
 
   componentDidMount() {
     // Fill out calendar form with voice
     this.props.commands.onFillOutForm((formData) => {
+      this.openModal(); 
       this.setState(formData);
     });
 
+    // this.props.commands.onVoiceSubmit(() => {
+    //   this.handleSubmit(e);
+    // });
+
     // Set up commands
     this.props.commands.addCommands(this.props.commands.commands);
-    
+
     // Start artyom listener
     this.props.commands.artyomStart();
   }
 
+  // Update Form's state on input form change
   handleChange(e) {
     var className = e.target.className;
     var value = e.target.value;
 
-    // TO DO: Change default event time to an hour, but need to change date as well if event goes past midnight
+    // TO DO: Change default event time to an hour, but need to change date as well if event goes past midnight (use MomentJS)
 
     if (className === 'form-event') {
       this.setState({
-        summary: value 
+        summary: value
       });
     } else if (className === 'form-location') {
       this.setState({
@@ -55,11 +69,11 @@ class Form extends React.Component {
   }
 
   handleSubmit(e) {
-    e.preventDefault(); 
+    e.preventDefault();
 
     // TO DO: Use geolocation to update timeZone automatically
 
-    // Create event object with this.state
+    // Create event object with Form's state
     var event = {
       summary: this.state.summary,
       location: this.state.location,
@@ -93,28 +107,61 @@ class Form extends React.Component {
       console.log('res', res);
       return res.json();
     }).then((data) => {
-      // do something
-      console.log('data', data);
+      // Refreshes today's events in order including new event that was just added
+      this.props.refreshEvents();
     }).catch((err) => {
-      console.log('err', err);
+      console.log('ERROR!', err);
     });
+
+    this.closeModal();
+  }
+
+  openModal() {
+    this.setState({
+      modalIsOpen: true
+    })
+  }
+
+  closeModal() {
+    this.setState({
+      modalIsOpen:false
+    })
   }
 
   render() {
     return (
       <div>
-        <form className="calendar-form" onSubmit={this.handleSubmit.bind(this)}>
-          Event:<br/>
-          <input type="text" className="form-event" value={this.state.summary} placeholder="Event" onChange={this.handleChange.bind(this)} /><br/><br/>
-          Date:<br/>
-          <input type="text" className="form-date" value={this.state.startDate} placeholder="Date" onChange={this.handleChange.bind(this)} /><br/><br/>
-          Time:<br/>
-          <input type="text" className="form-time" value={this.state.startTime} placeholder="Time" onChange={this.handleChange.bind(this)} /><br/><br/>
-          Location:<br/>
-          <input type="text" className="form-location" value={this.state.location} placeholder="Location" onChange={this.handleChange.bind(this)} /><br/><br/>
-
-          <input type="submit" value="Submit" />
-        </form>
+      <div className='add-event' onClick={this.openModal}>
+        Add event
+      </div>
+        <Modal 
+          className="ModalClass"
+          overlayClassName="OverlayClass"
+          isOpen={this.state.modalIsOpen}
+          onRequestClose={this.closeModal}
+        >
+          <div>
+            <form className="calendar-form" onSubmit={this.handleSubmit}>
+              <div className="calendar-form-title"> How's this look? </div>
+              <div>
+                Event: <input type="text" className="form-event" value={this.state.summary} placeholder="Event" onChange={this.handleChange} />
+              </div>
+              <div>
+                Location: <input type="text" className="form-location" value={this.state.location} placeholder="Location" onChange={this.handleChange} />
+              </div>
+              <div>
+                Date: <input type="text" className="form-date" value={this.state.startDate} placeholder="Date" onChange={this.handleChange} />
+              </div>
+              <div>
+                Time: <input type="text" className="form-time" value={this.state.startTime} placeholder="Time" onChange={this.handleChange} />
+              </div>
+              <div>
+                <button type="button" onClick={this.closeModal}> Nah </button>
+                <button type="submit" value="Looks good!" onClick={this.handleSubmit}>Looks Good </button>
+              </div>
+            </form>
+          </div>
+        </Modal>
       </div>
     );
   }

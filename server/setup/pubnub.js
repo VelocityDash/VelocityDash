@@ -1,6 +1,4 @@
 const PubNub = require('pubnub');
-require('dotenv').config();
-
 
 var pubnub = new PubNub({
     subscribeKey: process.env.PUBNUB_SUBSCRIBE_KEY,

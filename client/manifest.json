@@ -1,0 +1,19 @@
+{
+  "manifest_version": 2,
+  "name": "ModDash",
+  "description": "Quickly switch to other open tabs with just your keyboard",
+  "version": "1.0.0",
+  "background": {
+    "persistent": true,
+    "page": "./src/chrome/background.html"
+  },
+  "chrome_url_overrides": {
+    "newtab": "./public/dist/index.html"
+  },
+  "permissions": [
+    "notifications",
+    "background",
+    "identity"
+  ],
+  "content_security_policy": "script-src 'self' https://www.gstatic.com/ https://*.firebaseio.com https://www.googleapis.com https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.14.1/ https://cdn.pubnub.com/; object-src 'self' "
+}

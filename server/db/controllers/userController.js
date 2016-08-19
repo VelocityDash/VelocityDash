@@ -1,50 +1,61 @@
 const models = require('../models/models');
 const User = models.User;
 const googleOAuth = require('./../../setup/googleOAuth');
-const google = require('googleapis');
-const plus = google.plus('v1');
-
 var oauth2Client = googleOAuth.oauth2Client;
 
-
-const createUser = function(req, res) {
-  const code = req.query.code;
-  // console.log(code);
-  oauth2Client.getToken(code, function (err, tokens) {
-    if (err) {
-      console.warn('error in getting Token', err);
+const findOrCreateUser = (profile, tokens) => {
+  return User.findOrCreate({
+    where: { googleId: profile.id },
+    defaults: {
+      lastName: profile.name.familyName,
+      firstName: profile.name.givenName,
+      email: profile.emails[0].value,
+      refreshToken: tokens.refresh_token,
+      accessToken: tokens.access_token
     }
-
-    // console.log(tokens);
-
-    oauth2Client.setCredentials(tokens);
-
-    // console.dir('oauth2Client', oauth2Client);
-
-    plus.people.get({ userId: 'me', auth: oauth2Client }, function (err, profile) {
-      if (err) {
-        return console.log('An error occured', err);
-      }
-      // console.log(profile);
-      // BUG: this does not return email
-      User.create({
-        lastName: profile.name.familyName,
-        firstName: profile.name.givenName,
-        refreshToken: tokens.refresh_token,
-        accessToken: tokens.access_token
-      })
-    });
   });
-  res.send('Thank you for authorization!');
 };
 
-const getUserTokens = function(id){
+// TO DO: This needs to be fixed so that it's just doing User.findOne and returning the refreshToken as an attribute. 
+const getUserTokens = (id) => {
   return User.findOne({
     where: { id: id }
   })
-}
+  .then(data => {
+    oauth2Client.setCredentials({
+      refresh_token: data.dataValues.refreshToken
+    });
+
+    oauth2Client.refreshAccessToken((err, tokens) => {
+      console.log('token', tokens);
+      oauth2Client.setCredentials({
+        access_token: tokens.access_token,
+        refresh_token: tokens.refresh_token
+      });
+    });
+  });
+};
+
+const getGeolocation = (id) => {
+  console.log('============== [userController - getGeolocation]: userId =', id);
+
+  return User.findOne(
+    { attributes: ['id', 'geolocation'] },
+    { where: { id: id } }
+  );
+};
+
+const updateUserGeolocation = (id, geolocation) => {
+  return User.update(
+    { geolocation: geolocation },
+    { where: {id : id} })
+      .then((result) => result)
+      .catch((err) => err);
+};
 
 module.exports = {
-  createUser,
-  getUserTokens
+  findOrCreateUser,
+  getUserTokens,
+  getGeolocation,
+  updateUserGeolocation
 };

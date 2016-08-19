@@ -10,7 +10,7 @@ const artyomStart = () => {
   artyom.initialize({
     lang: 'en-GB',
     continuous: true,
-    debug: true,
+    debug: false,
     listen: true
   });
 
@@ -31,8 +31,8 @@ const getTime = () => {
   let amPm;
 
   if (hours >= 12) {
-    amPm = 'PM';
     hours = hours - 12;
+    amPm = 'PM';
   } else {
     amPm = 'AM';
   }
@@ -78,6 +78,13 @@ const getDate = () => {
   return `${day} ${month} ${dateNum}`;
 };
 
+// Capitalizes every word in a given string
+const capitalizeEveryWord = (string) => {
+  return string.split(' ').reduce((output, word) => {
+    return output += `${word[0].toUpperCase()}${word.slice(1, word.length)} `;
+  }, '').trim();
+};
+
 // Function that will take formData
 let handleFormData = () => {
   throw new Error('Missing callback function for onFillOutForm!');
@@ -86,26 +93,39 @@ let handleFormData = () => {
 const fillOutForm = (wildcard) => {
   // Separate event name, date/time and location
   let split = wildcard.split(' at ');
+  let eventName = capitalizeEveryWord(split[0]);
+  let location;
+  let dateObject;
+
+  // Set location and dateObject depending on the order of command
+  if (Chrono.parse(split[1]).length === 1) {
+    dateObject = Chrono.parse(split[1])[0].start;
+    location = capitalizeEveryWord(split[2]);
+  } else if (Chrono.parse(split[2]).length === 1) {
+    dateObject = Chrono.parse(split[2])[0].start;
+    location = capitalizeEveryWord(split[1]);
+  } else if (Chrono.parse(split[1]).length === 0 || Chrono.parse(split[2]).length === 0) {
+    console.warn(`Command can be said in two ways:\n [event] at [date/time] at [location]\n [event] at [location] at [date/time]`);
+  }
 
   // TO DO: Add console.warn if order of wildcard said wrong
 
   // Parse date/time information into object
-  let dateObject = Chrono.parse(split[1])[0].start;
   let date = Object.assign(dateObject.impliedValues, dateObject.knownValues);
-  
+
   // Add leading zeroes to month/day if less than 10
   (date.month < 10) ? date.month = `0${date.month}` : date.month = `${date.month}`;
   (date.day < 10) ? date.day = `0${date.day}` : date.day = `${date.day}`;
-  
+
   // Add leading zeroes to hour/minute if less than 10
   let time = '';
   (date.hour < 10) ? time += `0${date.hour}:` : time += `${date.hour}:`;
-  (date.minute < 10) ? time += `0${date.minute}` : time += `${date.minute} `;
+  (date.minute < 10) ? time += `0${date.minute}` : time += `${date.minute}`;
 
   // Generate form data object to pass to this.setState
   let formInfo = {
-    summary: split[0],
-    location: split[2],
+    summary: eventName,
+    location: location,
     startDate: `${date.year}-${date.month}-${date.day}`,
     startTime: time,
     endDate: `${date.year}-${date.month}-${date.day}`,
@@ -114,8 +134,17 @@ const fillOutForm = (wildcard) => {
 
   handleFormData(formInfo);
 
-  artyom.say(`Added ${split[0]} at ${split[2]} to the calendar.`);
+  // artyom.say(`Added ${eventName} at ${location} to the calendar. If everything on the form looks good, say add to calendar.`);
 };
+
+// let handleVoiceSubmit = () => {
+//   throw new Error('Missing callback function for onVoiceSubmit!');
+// };
+
+// const voiceSubmit = () => {
+//   console.log('Inside voiceSubmit');
+//   handleVoiceSubmit();
+// };
 
 /********************************************************
   ARTYOM COMMANDS
@@ -130,7 +159,7 @@ const commands = [
     indexes: ['render spotify playlist'],
     action: (i) => {
       artyom.say('Rendering Spotify playlist.');
-      
+
       $playlist = $('<iframe src="https://embed.spotify.com/?uri=spotify%3Auser%3Ababybluejeff%3Aplaylist%3A6toivxuv2M1tBLjLWZwf3d" width="300" height="380" frameborder="0" allowtransparency="true"></iframe>');
       $playlist.appendTo($('#main1'));
     }
@@ -152,44 +181,43 @@ const commands = [
     action: (i) => { artyom.say(`Today is ${getDate()}.`) }
   },
   {
-    indexes: ['* I choose you'],
+    indexes: ['open *', 'go to *'],
     smart: true,
     action: (i, wildcard) => {
-      wildcard = wildcard.toLowerCase();
-
-      artyom.say(`Looking for ${wildcard} in the database. One moment please.`);
-
-      $.ajax({
-        url: `http://pokeapi.co/api/v2/pokemon/${wildcard}`,
-        method: 'GET',
-        success: (data) => {
-          artyom.say(`Here is all the data on ${wildcard}`);
-          console.log('Pokemon data:', data);
-        },
-        error: (error) => {
-          artyom.say('Error retrieving Pokemon.');
-          console.log('Error retrieving Pokemon', error);
-        }
-      });
+      artyom.say(`Opening ${wildcard.replace('.', ' dot ')}.`);
+      window.open(`http://${wildcard}`)
     }
-  },
-  {
-    indexes: ['open *'],
-    smart: true,
-    action: (i, wildcard) => { window.open(`http://${wildcard}`) }
   },
   {
     indexes: ['search YouTube for *'],
     smart: true,
-    action: (i, wildcard) => { window.open(`https://www.youtube.com/results?search_query=${wildcard}`) }
+    action: (i, wildcard) => {
+      artyom.say(`Searching YouTube for ${wildcard}.`);
+      window.open(`https://www.youtube.com/results?search_query=${wildcard}`)
+    }
   },
   {
-    indexes: ['create event *'],
+    indexes: ['search Amazon for *'],
+    smart: true,
+    action: (i, wildcard) => {
+      artyom.say(`Searching Amazon for ${wildcard}.`);
+      window.open(`https://www.amazon.com/s/ref=nb_sb_noss_2/180-3667157-6088933?url=search-alias%3Daps&field-keywords=${wildcard}`);
+    }
+  },
+  {
+    indexes: ['create event *', 'add event *', 'make event *'],
     smart: true,
     action: (i, wildcard) => {
       fillOutForm(wildcard);
     }
   }
+  // {
+  //   indexes: ['looks good', 'add to calendar'],
+  //   action: (i) => {
+  //     console.log('Inside artyom command');
+  //     voiceSubmit();
+  //   }
+  // }
 ];
 
 /********************************************************
@@ -197,12 +225,15 @@ const commands = [
 ********************************************************/
 
 module.exports = {
-  artyomStart: artyomStart,
-  artyomStop: artyomStop,
-  fillOutForm: fillOutForm,
+  artyomStart,
+  artyomStop,
+  // fillOutForm: fillOutForm,
   addCommands: artyom.addCommands,
-  commands: commands,
-  onFillOutForm: function(callback) {
+  commands,
+  onFillOutForm: (callback) => {
     handleFormData = callback;
   }
+  // onVoiceSubmit: (callback) => {
+  //   handleVoiceSubmit = callback;
+  // }
 };
