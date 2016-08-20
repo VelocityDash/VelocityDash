@@ -108,6 +108,8 @@ const fillOutForm = (wildcard) => {
     console.warn(`Command can be said in two ways:\n [event] at [date/time] at [location]\n [event] at [location] at [date/time]`);
   }
 
+  // TO DO: Add console.warn if order of wildcard said wrong
+
   // Parse date/time information into object
   let date = Object.assign(dateObject.impliedValues, dateObject.knownValues);
 
