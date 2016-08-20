@@ -1,5 +1,6 @@
 const twilio = require('../../setup/twilio');
 
+// Fri Aug 19 2016 17:30:00 GMT-0700 (PDT)
 const newTwilioMessage = (phoneNumber, eventName, trafficInMilliseconds, eventLocation) => {
   twilio.messages.create({
     to: phoneNumber,
