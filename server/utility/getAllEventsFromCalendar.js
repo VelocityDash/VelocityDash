@@ -1,23 +1,14 @@
-const Promise = require('bluebird');
-const google = require('googleapis');
-var calendar = google.calendar('v3');
-const googleOAuth = require('../../setup/googleOAuth');
-const EventController = require('../../db/controllers').EventController;
+const EventController = require('../db/controllers').EventController;
 // const { UserController, EventController } = require('../db/controllers');
+const google = require('googleapis');
+const calendar = google.calendar('v3');
+const googleOAuth = require('../setup/googleOAuth');
+const Promise = require('bluebird');
 
-calendar.events.insert = Promise.promisify(calendar.events.insert);
 calendar.events.list = Promise.promisify(calendar.events.list);
 
-const insertEvent = (auth, resource) => {
-  var params = {
-    calendarId: 'primary', 
-    auth,
-    resource
-  };
-  return calendar.events.insert(params);
-};
-
-const getAllEventsFromCalendar = (req, res) => {
+// currently not in use, need to fix this
+const getAllEventsFromCalendar = function (req, res) {
   return googleOAuth.getUserTokens(req.userId)
   .then(data => {
     calendar.events.list({
@@ -36,7 +27,4 @@ const getAllEventsFromCalendar = (req, res) => {
   });
 };
 
-module.exports = {
-  insertEvent,
-  getAllEventsFromCalendar
-};
+module.exports = getAllEventsFromCalendar;
