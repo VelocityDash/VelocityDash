@@ -5,8 +5,6 @@ const queryTraffic = require('../workers/queryTraffic');
 const google = require('googleapis');
 const googleAuth = require('../utility/auth/googleAuth');
 const Promise = require('bluebird');
-const calendar = google.calendar('v3');
-calendar.events.list = Promise.promisify(calendar.events.list);
 
 const addEventAndAddTravel = (req, res) => {
   addEvent(req.userId, req.body)
@@ -22,40 +20,14 @@ const addEventAndAddTravel = (req, res) => {
 };
 
 const getDayEvents = (req, res) => {
-  // console.log('in get day events', req.session);
-  // req.session.regenerate(() => {
-    // req.session.something = 'something';
-    // console.log('after regenerating', req.session);  
-  Event.retrieveDayEvent(req.userId)
+  Event.getDayEvents(req.userId)
   .then(datas => {
     res.send(datas);
   });
   // })
 };
 
-// Currently not in use. Need to fix this.
-const getAllEventsFromCalendar = (req, res) => {
-  return googleAuth.getUserTokens(req.userId)
-  .then(oauth2Client => {
-    calendar.events.list({
-      auth: oauth2Client,
-      calendarId: 'primary',
-      singleEvents: true,
-      minTime: Date.now()
-      // not sure about the params to get all events or get new events that we don't have yet.
-    })
-    .then(data => {
-      data.items.forEach(event => {
-        Event.insertEvent(event, userId);
-      });
-      
-      res.send(data.items);      
-    });
-  });
-};
-
 module.exports = {
   addEventAndAddTravel,
-  getDayEvents,
-  getAllEventsFromCalendar
+  getDayEvents
 };

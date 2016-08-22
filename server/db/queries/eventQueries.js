@@ -7,7 +7,6 @@ const db = require('../db.js');
 // rename these to queries/eventQueries
 // export all to index.js
 const insertEvent = (userId, data) => {
-  console.log('data', data);
   return Event.findOrCreate({
     where: { googleCalendarEventId: data.id },
     defaults: {
@@ -30,7 +29,7 @@ const retrieveEvent = (id) => {
   });
 };
 
-const retrieveDayEvent = (userId) => {
+const getDayEvents = (userId) => {
   var nowInUTC = moment().utcOffset(0000).subtract(7, 'hours').format('YYYY-MM-DD HH:mm') + ':00+00';
   var midnightInUTC = moment().add(1, 'days').format('YYYY-MM-DD') + ' 06:59:00+00';
   return Event.findAll({
@@ -51,5 +50,5 @@ const retrieveDayEvent = (userId) => {
 module.exports = {
   insertEvent,
   retrieveEvent,
-  retrieveDayEvent
+  getDayEvents
 };
