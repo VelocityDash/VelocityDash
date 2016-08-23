@@ -28,8 +28,9 @@ const getEventsFromGoogleCal = (userId) => {
       calendarId: 'primary',
       auth: oauth2Client,
       singleEvents: true,
-      minTime: Date.now()
-      // not sure about the params to get all events or get new events that we don't have yet.
+      timeMin: (new Date(Date.now() - 12096e5)).toISOString(),
+      timeMax: (new Date(Date.now() + 12096e5)).toISOString()
+      // 12096e5 is 2 weeks in milliseconds, so this will pull events from 2 weeks in the past and 2 weeks in the future
     };
     return calendar.events.list(params);
   })

@@ -1,6 +1,10 @@
 const User = require('../db/queries').User;
 const googleAuth = require('../utility/auth/googleAuth');
 const jwt = require('../utility/auth/jwt');
+const getAllEvents = require('../utility/calendar/getAllEvents');
+const checkCalendar = require('../workers/checkCalendar');
+const moment = require('moment');
+
 
 const authHandler = (req, res) => {
   // do oAuth with the token that comes back from google
@@ -20,7 +24,10 @@ const authHandler = (req, res) => {
       // if user is found, log them in and give them the token and unique pubnub channel
       if (user) {
         var token = jwt.signJWT(user.dataValues.id);
-        
+
+        // get all of the users events from googleCal
+        getAllEvents(user.dataValues.id);
+
         res.json({
           success: true,
           message: 'Here is your token and channel',
@@ -48,6 +55,14 @@ const authCallback = (req, res) => {
       if (created) { // this is for new users
       // NOTE: REDIRECT THEM TO SPLASH PAGE HERE. 
         // res.redirect('/')
+        // get all of the users events from googleCal
+        getAllEvents(user.dataValues.id);
+        
+        // TO DO: Fix the recurring check
+        // // schedule check at midnight
+        // var midnightInUTC = moment().add(1, 'days').format('YYYY-MM-DD') + ' 06:59:00+00';
+        // checkCalendar(midnightInUTC, user.dataValues.id);
+
         res.send('splash page');
       } else {
       // Could redirect them to same splash page

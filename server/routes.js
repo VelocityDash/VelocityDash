@@ -37,8 +37,6 @@ router.get('/verified', AuthController.authCallback); // Google redirect after a
 router.post('/api/calendar/addEvent', EventController.addEventAndAddTravel);
 router.get('/api/calendar/getDayEvents', EventController.getDayEvents);
 
-// this endpoint is not doing anything, it was just to trigger a function to fetch all of the user's events in the calendar, but we can do this on the auth callback page or elsewhere
-// router.get('/calendar/getAllEvents', getAllEventsFromCalendar);
 
 // User Routes
 router.get('/api/users/getTransit', UserController.getTransitMode);
