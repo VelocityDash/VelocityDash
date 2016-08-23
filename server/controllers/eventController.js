@@ -24,7 +24,6 @@ const getDayEvents = (req, res) => {
   .then(datas => {
     res.send(datas);
   });
-  // })
 };
 
 module.exports = {

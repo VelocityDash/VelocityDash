@@ -9,7 +9,8 @@ agenda.define('send leave notification', (job, done) => {
   .then(user => {
     job.attrs.data.transit = user.dataValues.transitmode;
     job.attrs.data.origin = user.dataValues.geolocation;
-    job.attrs.data.phone = user.dataValues.phone;
+    // job.attrs.data.phone = user.dataValues.phone;
+    var phoneNumber = user.dataValues.phone;
 
     var channel = user.dataValues.pubnubid;
     var message = job.attrs.data;
@@ -22,13 +23,13 @@ agenda.define('send leave notification', (job, done) => {
     //   console.log('canceled job after notification was sent', jobs);
     // })
 
-    // Get user's phone number from DB
-
-
     // Send text message via Twilio
-    // TO DO: Phone number should NOT be hard coded.
-    newTwilioMessage('14158124699', message.name, message.traffic, message.location);
+    console.log(`=============== [sendLeaveNotification]: Sending Twilio message\nPhone: ${message.phone}\nMessage: ${message.name}\nTraffic: ${message.traffic}\nLocation: ${message.location}`);
+
+    newTwilioMessage(phoneNumber, message.name, message.traffic, message.location);
+
     console.log('Sending notification to user to leave now for event:', message.name);
+
     done();
   });
 });

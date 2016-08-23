@@ -16,9 +16,7 @@ const updateGeolocation = (req, res) => {
       initializing = true;
     }
   })
-  .then(() => {
-    return User.updateUserGeolocation(req.userId, req.body.geolocation)
-  })
+  .then(() => User.updateUserGeolocation(req.userId, req.body.geolocation))
   .then((result) => {
     if (initializing) {
       // update all travels & schedule traffic queries for this user's events

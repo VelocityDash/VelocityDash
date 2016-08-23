@@ -23,6 +23,12 @@ const authUser = (profile) => {
   });
 };
 
+const getUser = (id) => {
+  return User.findOne({
+    where: { id: id }
+  });
+};
+
 const getUserInfo = (id) => {
   return User.findOne({
     where: { id: id },
@@ -41,8 +47,8 @@ const getUserChannel = (id) => {
   return User.findOne({
     where: { id: id },
     attributes: ['pubnubid']
-  })
-}
+  });
+};
 
 const updateUserGeolocation = (id, geolocation) => {
   return User.update(
@@ -67,6 +73,7 @@ const updateUserSettings = (id, transit, phoneNumber) => {
 module.exports = {
   findOrCreateUser,
   authUser,
+  getUser,
   getUserInfo,
   getRefreshToken,
   getUserChannel,
