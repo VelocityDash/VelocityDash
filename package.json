@@ -6,7 +6,6 @@
   "scripts": {
     "test": "mocha tests --timeout 6000",
     "start": "nodemon server/server.js",
-    "dev:hot": "nodemon server/server.js & webpack --watch & open -a \"Google Chrome\" http://localhost:3000",
     "dev": "node_modules/.bin/webpack-dev-server --progress --inline --hot",
     "initDB": "sh server/db/dbinit.sh",
     "build": "webpack --watch",

@@ -34,7 +34,7 @@ class Setting extends React.Component {
       phoneNumber: this.state.phoneNumber
     };
 
-    fetch('http://localhost:9000/api/users/updateSettings', {
+    fetch('http://ec2-52-43-234-146.us-west-2.compute.amazonaws.com/api/users/updateSettings', {
       method: 'POST',
       body: JSON.stringify(settings),
       mode: 'cors-with-forced-preflight',
@@ -59,7 +59,7 @@ class Setting extends React.Component {
       <div>
         <Modal className="ModalForm" show={this.props.settingsIsOpen} onHide={this.props.toggleSettings}>
           <Modal.Header closeButton>
-            <Modal.Title> 
+            <Modal.Title>
               <div className="settings-title">Settings</div>
             </Modal.Title>
           </Modal.Header>

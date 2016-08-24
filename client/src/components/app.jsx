@@ -37,7 +37,7 @@ class App extends React.Component {
     var token = localStorage.getItem('token');
 
     // Post event to Google Calendar API
-    fetch('http://localhost:9000/api/calendar/getDayEvents', {
+    fetch('http://ec2-52-43-234-146.us-west-2.compute.amazonaws.com/api/calendar/getDayEvents', {
       method: 'GET',
       mode: 'cors-with-forced-preflight',
       headers: {
@@ -62,7 +62,7 @@ class App extends React.Component {
       console.log('Error retrieving events', err);
     });
   }
-  
+
   handleTransChange(value) {
     this.setState({ displayTransitMode: value });
   }
@@ -70,7 +70,7 @@ class App extends React.Component {
   displayTransitMode() {
     var token = localStorage.getItem('token');
 
-    fetch('http://localhost:9000/api/users/getTransit', {
+    fetch('http://ec2-52-43-234-146.us-west-2.compute.amazonaws.com/api/users/getTransit', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

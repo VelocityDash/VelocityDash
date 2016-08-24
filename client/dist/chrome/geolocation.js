@@ -2,15 +2,15 @@
 // It will attempt to make a fetch even if the user is not logged in yet. It also handles all responses as success even though if they have no token, the server will block the API endpoint and return an error status code.
 const getGeolocation = () => {
   let geoOptions = { timeout: 10000 };
-  
 
 
- 
+
+
   const geoSuccess = (position) => {
     let geolocation = `${position.coords.latitude} ${position.coords.longitude}`;
       // add token here too;
     var token = localStorage.getItem('token');
-    fetch('http://localhost:9000/api/users/getGeolocation', {
+    fetch('http://ec2-52-43-234-146.us-west-2.compute.amazonaws.com/api/users/getGeolocation', {
       method: 'GET',
       headers: {
       'Accept': 'application/json',
@@ -50,7 +50,7 @@ const getGeolocation = () => {
 const updateGeolocation = (geolocation) => {
   var token = localStorage.getItem('token');
 
-  fetch('http://localhost:9000/api/users/updateGeolocation', {
+  fetch('http://ec2-52-43-234-146.us-west-2.compute.amazonaws.com/api/users/updateGeolocation', {
     method: 'POST',
     headers: {
       'Accept': 'application/json',

@@ -10,7 +10,7 @@ const addEventToGoogleCal = (userId, eventDetails) => {
   return googleAuth.getUserTokens(userId)
   .then(oauth2Client => {
     var params = {
-      calendarId: 'primary', 
+      calendarId: 'primary',
       auth: oauth2Client,
       resource: eventDetails
     };
@@ -20,6 +20,7 @@ const addEventToGoogleCal = (userId, eventDetails) => {
     console.warn('error in adding event to Google Calendar:', err);
   });
 };
+
 
 const getEventsFromGoogleCal = (id) => {
   return googleAuth.getUserTokens(id)

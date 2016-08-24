@@ -150,7 +150,7 @@ class Form extends React.Component {
     console.log('got token for adding event', token);
 
     // Post event to Google Calendar API
-    fetch('http://localhost:9000/api/calendar/addEvent', {
+    fetch('http://ec2-52-43-234-146.us-west-2.compute.amazonaws.com/api/calendar/addEvent', {
       method: 'POST',
       body: JSON.stringify(event),
       mode: 'cors-with-forced-preflight',
