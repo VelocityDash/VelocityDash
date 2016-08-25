@@ -65,9 +65,9 @@ class Form extends React.Component {
     let split = time.split(':');
     let hours = Number(split.shift());
     let minutes = Number(split.join('').split(' ')[0]);
-    let amPm = split.join('').split(' ')[1];
+    let amPm = (split.join('').split(' ')[1]).toUpperCase();
     
-    if (amPm === 'PM') { hours += 12; }
+    if (amPm === 'PM' && hours !== 12) { hours += 12; }
 
     return `${hours}:${minutes}`;
   }
@@ -251,10 +251,10 @@ class Form extends React.Component {
                 Location: <input type="text" className="form-location" value={this.state.location} placeholder="Location of event" onChange={this.handleChange} />
               </div>
               <div>
-                Date: <input type="text" className="form-date" value={this.state.startDate} placeholder="YYYY-MM-DD" onChange={this.handleChange} />
+                Date: <input type="text" className="form-date" value={this.state.startDate} placeholder="M/D/YYYY" onChange={this.handleChange} />
               </div>
               <div>
-                Time: <input type="text" className="form-time" value={this.state.startTime} placeholder="HH:MM AM/PM" onChange={this.handleChange} />
+                Time: <input type="text" className="form-time" value={this.state.startTime} placeholder="h:mm am/pm" onChange={this.handleChange} />
               </div>
               {this.state.recIsOpen ? displayRecur : null}
             </form>
