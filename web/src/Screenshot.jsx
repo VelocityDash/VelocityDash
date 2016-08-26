@@ -5,7 +5,7 @@ class Screenshot extends React.Component {
   render() {
     return(
       <Section style={{'textAlign': 'center'}}>
-        <img style={{width: '90%'}} src="./assets/velocity_dash5.png" />
+        <img style={{width: '90%'}} src="./assets/velocity_dash.png" />
       </Section>
     );
   }
