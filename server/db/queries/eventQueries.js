@@ -30,20 +30,24 @@ const retrieveEvent = (id) => {
 };
 
 const getDayEvents = (userId) => {
-  var nowInUTC = moment().utcOffset('0000').subtract(7, 'hours').format('YYYY-MM-DD HH:mm') + ':00+00';
-  var midnightInUTC = moment().add(1, 'days').format('YYYY-MM-DD') + ' 06:59:00+00';
+  // Postgres stores time data in UTC time
+  // var nowInUTC = moment().utcOffset('0000').subtract(7, 'hours').format('YYYY-MM-DD HH:mm') + ':00+00';
+  // var midnightInUTC = moment().add(1, 'days').format('YYYY-MM-DD') + ' 06:59:00+00';
+  var nowInUTC = moment().utcOffset('0000').format('YYYY-MM-DD HH:mm') + ':00+00';
+  var nextDayInUTC = moment().add(1, 'days').format('YYYY-MM-DD HH:mm') + ':00+00';
+  // nextDayInUTC is not exactly midnight, and it is 1 day forward from locale time, but deployed server is in UTC
   return Event.findAll({
     where: {
       userId: userId,
-      startdatetime: {$between: [nowInUTC, midnightInUTC]}
+      startdatetime: {$between: [nowInUTC, nextDayInUTC]}
     }
   })
   .then(events => {
     events.forEach((event) => {
       event = event.dataValues;
-      event.startdatetime = moment(event.startdatetime).format('LT');
+      // this converts to local time, but the deployed server is running on UTC time
+      // event.startdatetime = moment(event.startdatetime).format('LT');
     });
-
     return events;
   });
 };

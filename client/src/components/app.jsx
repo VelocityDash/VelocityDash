@@ -99,6 +99,7 @@ class App extends React.Component {
     .then((res) => res.json())
       .then((data) => {
         let eventList = data.map((event) => {
+          event.startdatetime = moment(event.startdatetime).format('LT');
           return {
             eventName: event.name,
             location: event.location,
@@ -108,6 +109,7 @@ class App extends React.Component {
           };
         });
 
+        // SORTING NEEDS TO SORT BY DATE AS WELL, NOT JUST TIME
         this.sortAndUpdateEvents(eventList);
       })
     .catch((err) => {
@@ -134,6 +136,7 @@ class App extends React.Component {
       });
   }
 
+  // SORTING NEEDS TO SORT BY DATE AS WELL, NOT JUST TIME
   sortAndUpdateEvents(eventList) {
     // Get all event times
     let times = eventList.reduce((array, event) => {
