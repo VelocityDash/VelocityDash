@@ -11,7 +11,6 @@ import Commands from './Commands.jsx';
 import TransitMode from './TransitMode.jsx';
 import { addCommands, artyomStart, artyomStop, commands, speech } from '../scripts/commands';
 
-
 class App extends React.Component {
   constructor(props) {
     super(props);

@@ -325,7 +325,7 @@ class Form extends React.Component {
           </Modal.Body>
           <Modal.Footer>
             <div>
-              <Button bsSize="small" className='repeat-button' onClick={this.clickRecur}>Add Recurence</Button>
+              <Button bsSize="small" className='repeat-button' onClick={this.clickRecur}>Add Recurrence</Button>
               <Button bsSize="small" onClick={this.clearAndToggleForm}>Cancel</Button>
               <Button bsSize="small" type="submit" onClick={this.handleSubmit}>Add Event</Button>
             </div>

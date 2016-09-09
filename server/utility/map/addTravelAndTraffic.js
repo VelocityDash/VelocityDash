@@ -5,16 +5,9 @@ const Event = require('../../db/queries').Event;
 const addToTravelAndTraffic = (userId) => {
   return Event.getAllUserEvents(userId)
   .then(events => {
-    events.forEach(event => {
-      return addTravel(event)
-      .then(travel => {
-        return queryTraffic(travel);
-      });
-    });
+    events.forEach(event => addTravel(event).then(travel => queryTraffic(travel)));
   })
-  .catch(err => {
-    console.warn('error in adding inital user events to travel & traffic', err);
-  });
+  .catch(err => { console.warn('Error adding initial user events to travel and traffic.\n', err); });
 };
 
 module.exports = addToTravelAndTraffic;

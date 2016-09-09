@@ -15,19 +15,16 @@ var params = {
 };
 
 // Create the instance
-ec2.runInstances(params, function(err, data) {
-  if (err) { console.log("Could not create instance", err); return; }
+ec2.runInstances(params, (err, data) => {
+  if (err) { console.log('Could not create instance.\n', err); return; }
 
   var instanceId = data.Instances[0].InstanceId;
-  console.log("Created instance", instanceId);
 
   // Add tags to the instance
-  params = {Resources: [instanceId], Tags: [
-    {Key: 'Name', Value: 'instanceName'}
-  ]};
-  ec2.createTags(params, function(err) {
-    console.log("Tagging instance", err ? "failure" : "success");
+  params = {
+    Resources: [instanceId], 
+    Tags: [{ Key: 'Name', Value: 'instanceName'} ]};
+  ec2.createTags(params, (err) => {
+    console.log('Tagging instance:', (err) ? 'failure' : 'success');
   });
 });
-
-// [1] 32189

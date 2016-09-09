@@ -1,6 +1,5 @@
 const User = require('../models').User;
 const uuid = require('node-uuid');
-// const { User } = require('../models');
 
 const findOrCreateUser = (profile, tokens) => {
   return User.findOrCreate({
@@ -17,17 +16,9 @@ const findOrCreateUser = (profile, tokens) => {
   });
 };
 
-const authUser = (profile) => {
-  return User.findOne({
-    where: { googleid: profile.id }
-  });
-};
+const authUser = (profile) => User.findOne({ where: { googleid: profile.id } });
 
-const getUser = (id) => {
-  return User.findOne({
-    where: { id: id }
-  });
-};
+const getUser = (id) => User.findOne({ where: { id: id } });
 
 const getUserInfo = (id) => {
   return User.findOne({

@@ -1,27 +1,19 @@
 const Travel = require('../models').Travel;
-// const { Travel } = require('../models');
 
-const initiateTravel = function(event, initialEstimate) {
+const initiateTravel = (event, initialEstimate) => {
   return Travel.findOrCreate({
     where: {eventId: event.id},
     defaults: {
-      // origins: Sequelize.STRING,
       destination: event.location,
       initialEstimate: initialEstimate,
       queryTime: new Date(Date.parse(event.startdatetime) - (initialEstimate * 2)),
-          // take the arrival time and subtract double the initial estimate for when to begin querying
-      // trafficEstimate: Sequelize.INTEGER,
-      // mapsUrl: Sequelize.STRING,
-      notificationTime: new Date(Date.parse(event.startdatetime) - (initialEstimate + 300000)),
-      // notify 5 minutes before you need to leave
+      notificationTime: new Date(Date.parse(event.startdatetime) - (initialEstimate + 300000)), // Sends notification 5 minutes prior
       userId: event.userId
     }
   });
 };
 
-const getAllTravel = function() {
-  return Travel.findAll();
-};
+const getAllTravel = () => Travel.findAll();
 
 module.exports = {
   initiateTravel,

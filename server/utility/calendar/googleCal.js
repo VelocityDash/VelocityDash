@@ -5,57 +5,43 @@ const Promise = require('bluebird');
 
 calendar.events.insert = Promise.promisify(calendar.events.insert);
 calendar.events.list = Promise.promisify(calendar.events.list);
-// calendar.events.delete = Promise.promisify(calendar.events.delete);
 
 const addEventToGoogleCal = (userId, eventDetails) => {
   return googleAuth.getUserTokens(userId)
   .then(oauth2Client => {
-    var params = {
+    return calendar.events.insert({
       calendarId: 'primary',
       auth: oauth2Client,
       resource: eventDetails
-    };
-    return calendar.events.insert(params);
+    });
   })
-  .catch(err => {
-    console.warn('error in adding event to Google Calendar:', err);
-  });
+  .catch(err => { console.warn('Error adding event to Google Calendar.\n', err); });
 };
 
 const getEventsFromGoogleCal = (id) => {
   return googleAuth.getUserTokens(id)
   .then(oauth2Client => {
-    var params = {
+    return calendar.events.list({
       auth: oauth2Client,
       calendarId: 'primary',
       singleEvents: true,
       timeMin: (new Date(Date.now() - 12096e5)).toISOString(),
       timeMax: (new Date(Date.now() + 12096e5)).toISOString()
-      // 12096e5 is 2 weeks in milliseconds, so this will pull events from 2 weeks in the past and 2 weeks in the future
-    };
-    return calendar.events.list(params);
+    });
   })
-  .catch(err => {
-    console.warn('error in getting events from Google Calendar', err);
-  });
+  .catch(err => { console.warn('Error getting events from Google Calendar.\n', err); });
 };
 
 const deleteEvent = (id, event) => {
-  console.log('inside d event google cal', event);
   return googleAuth.getUserTokens(id)
   .then(oauth2Client => {
-    var params = {
+    return calendar.events.delete({
       auth: oauth2Client,
       calendarId: 'primary',
       eventId: event
-    };
-    return calendar.events.delete(params, function(res) {
-      console.log('deleted event from gcal', res);
-    });
+    }, (res) => { console.log('Deleted event from Google Calendar.\n', res); });
   })
-  .catch(err => {
-    console.warn('did not delete event from google calendar', err);
-  });
+  .catch(err => { console.warn('Error deleting event from Google Calendar.\n', err); });
 };
 
 module.exports = {

@@ -13,11 +13,7 @@ const db = new Sequelize('velocitydashdb', process.env.PSQL_username, process.en
 
 // Test Sequelize connection
 db.authenticate()
-  .then(err => {
-    console.log('Server is connected to AWS postgres db.');
-  })
-  .catch(err => {
-    console.log('Unable to connect to Postgres AWS database:\n', err);
-  });
+  .then(err => { console.log('Server is connected to AWS Postgres DB.'); })
+  .catch(err => { console.log('Unable to connect to AWS Postgres DB\n', err); });
 
 module.exports = db;

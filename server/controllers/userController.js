@@ -11,22 +11,18 @@ const updateGeolocation = (req, res) => {
   var initalizing = false;
 
   return User.getUserInfo(req.userId)
-  .then(user => {
-    if (user.dataValues.geolocation === null) {
-      initializing = true;
-    }
-  })
-  .then(() => User.updateUserGeolocation(req.userId, req.body.geolocation))
-  .then((result) => {
-    if (initializing) {
-      // update all travels & schedule traffic queries for this user's events
-      // console.log('updating travel and traffic!');
-      addToTravelAndTraffic(req.userId);
-      initializing = false; 
-    }
-    res.sendStatus(200); 
-  })
-  .catch((err) => { res.sendStatus(404); });
+    .then(user => {
+      if (user.dataValues.geolocation === null) { initializing = true; }
+    })
+    .then(() => User.updateUserGeolocation(req.userId, req.body.geolocation))
+    .then((result) => {
+      if (initializing) {
+        addToTravelAndTraffic(req.userId);
+        initializing = false; 
+      }
+      res.sendStatus(200); 
+    })
+    .catch((err) => { res.sendStatus(404); });
 };
 
 const getTransitMode = (req, res) => {

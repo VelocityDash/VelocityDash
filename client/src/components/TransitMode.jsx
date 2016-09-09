@@ -20,6 +20,8 @@ class Setting extends React.Component {
 
   updateSelectedTransitMode(value) {
     this.setState({ selectedTransitMode: value });
+
+    console.log(`Updated selectedTransitMode. ${this.state.selectedTransitMode} should equal ${value}`);
   }
   
   handleSubmit() {
@@ -38,9 +40,7 @@ class Setting extends React.Component {
     })
     .then((res) => res.text())
     .then((data) => { this.props.transitChange(data); })
-    .catch((err) => {
-      console.log('did not save mode to db', err);
-    });
+    .catch((err) => { console.log('Error saving transit mode to DB.\n', err); });
 
     this.props.toggleTransitMode();
   }
